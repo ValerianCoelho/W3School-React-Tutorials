@@ -1,28 +1,41 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
-import './index.css'
+import { useState, createContext, useContext } from 'react';
+
+const myContext = createContext();
 
 function App(){
-    const [items, setItems] = useState([])
-    const [resourceType, setResourceType] = useState('posts');
-
-    useEffect(()=>{
-        fetch(`https://jsonplaceholder.typicode.com/${resourceType}`)
-        .then(response => response.json())
-        .then(json => setItems(json))
-    }, [resourceType])
+    const [userName, setName] = useState('Valerian');
 
     return (
+        <myContext.Provider value={userName}>
+            <h1>Hello {userName}</h1>
+            <Component1 />
+        </myContext.Provider>
+    );
+}
+
+function Component1(){
+    return (
         <>
-        <div>
-            <button onClick={()=> setResourceType('posts')}>Posts</button>
-            <button onClick={()=> setResourceType('users')}>Users</button>
-            <button onClick={()=> setResourceType('comments')}>Comments</button>
-        </div>
-        <h1>{resourceType}</h1>
-        {items.map(item => <p>{JSON.stringify(item)}</p>)}
+            <h1>Hello</h1>
+            <Component2 />
         </>
     );
+}
+
+function Component2(){
+    return (
+        <>
+            <h1>Hello</h1>
+            <Component3 />
+        </>
+    );
+}
+
+function Component3(){
+    const userName = useContext(myContext);
+
+    return (<h1>Hello {userName} again</h1>);
 }
 
 export default App;
